@@ -73,21 +73,11 @@ if user_input:
                 # Debug: show raw response type and content
                 # st.write(f"DEBUG response type: {type(response)}")
                 # st.write(f"DEBUG response content: {response}")
-
-                # Ensure response is string
-                if not isinstance(response, str):
-                    try:
-                        response = response.content
-                    except AttributeError:
-                        response = str(response)
-
-                if not response.strip():
-                    response = "⚠️ Sorry, I couldn't generate a response."
-
                 # Display only once
-                st.markdown(response)
+                res = str(response)
+                st.markdown(res)
 
-                st.session_state.chat_history.append({"role": "assistant", "content": response})
+                st.session_state.chat_history.append({"role": "assistant", "content": res})
 
             except Exception as e:
                 error_msg = f"⚠️ Error: {e}"
