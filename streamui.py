@@ -49,41 +49,44 @@ agent, memory = load_agent()
 
 st.title("💬 Tech ChatBot")
 
+# سجل المحادثة
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-
+# عرض المحادثة السابقة
 for msg in st.session_state.chat_history:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-
+# إدخال المستخدم
 user_input = st.chat_input("Write your question here...")
 
 if user_input:
-    
+    # أضف رسالة المستخدم
     st.session_state.chat_history.append({"role": "user", "content": user_input})
     with st.chat_message("user"):
         st.markdown(user_input)
 
-    
+    # تشغيل الوكيل والرد
     with st.chat_message("assistant"):
         with st.spinner("⏳ Loading..."):
-            response = agent.run(user_input)
+            try:
+                response = agent.run(user_input)
 
-# تحقق إن الرد نص
-if not isinstance(response, str):
-    try:
-        # لو فيه خاصية content
-        response = response.content
-    except AttributeError:
-        # أو حاولي تحولين الرد لنص
-        response = str(response)
+                # تحقق إن الرد نص
+                if not isinstance(response, str):
+                    try:
+                        response = response.content
+                    except AttributeError:
+                        response = str(response)
 
-# إذا كان فاضي
-if not response.strip():
-    response = "⚠️ لم أستطع معالجة رد مناسب."
+                # لو كان الرد فاضي
+                if not response.strip():
+                    response = "⚠️ Sorry, I couldn't generate a response."
 
-# عرض الرد
-st.markdown(response)
-st.session_state.chat_history.append({"role": "assistant", "content": response})
+            except Exception as e:
+                response = f"⚠️ Error: {e}"
+
+            # عرض الرد
+            st.markdown(response)
+            st.session_state.chat_history.append({"role": "assistant", "content": response})
