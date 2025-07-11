@@ -1,6 +1,5 @@
 streamlit
 langchain
-huggingface_hub 
-transformers
+langchain-google-genai
 langchain_community
 wikipedia 
