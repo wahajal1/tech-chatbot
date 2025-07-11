@@ -6,13 +6,6 @@ from langchain.utilities import WikipediaAPIWrapper
 from langchain.tools import WikipediaQueryRun
 from langchain.memory import ConversationBufferMemory
 
-import os
-token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
-
-if not token:
-    raise ValueError("❌ HuggingFace token not found. Set it in environment variables or secrets.")
-
-
 @st.cache_resource
 def load_agent():
     llm = HuggingFaceHub(
