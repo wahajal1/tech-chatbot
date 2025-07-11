@@ -72,7 +72,9 @@ if user_input:
         with st.spinner("⏳ Loading..."):
             try:
                 response = agent.run(user_input)
-
+                # عرض الرد
+                st.markdown(response)
+                st.session_state.chat_history.append({"role": "assistant", "content": response})
                 # تحقق إن الرد نص
                 if not isinstance(response, str):
                     try:
@@ -87,6 +89,4 @@ if user_input:
             except Exception as e:
                 response = f"⚠️ Error: {e}"
 
-            # عرض الرد
-            st.markdown(response.content)
-            st.session_state.chat_history.append({"role": "assistant", "content": response.content})
+           
