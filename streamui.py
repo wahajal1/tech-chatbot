@@ -1,17 +1,19 @@
 import os
 import streamlit as st
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_community.llms import HuggingFaceHub
 from langchain.agents import Tool, initialize_agent, AgentType
 from langchain.utilities import WikipediaAPIWrapper
 from langchain.tools import WikipediaQueryRun
 from langchain.memory import ConversationBufferMemory
 
-os.environ["GOOGLE_API_KEY"] ="AIzaSyDxcmxnwx9cj5G7hnnLDg63XmwbubzAymo"
+os.environ["HUGGINGFACEHUB_API_TOKEN"] = "hf_YourTokenHere"  # ضع التوكن الخاص بك هنا
 
 @st.cache_resource
 def load_agent():
-    llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0.3, google_api_key ="AIzaSyDxcmxnwx9cj5G7hnnLDg63XmwbubzAymo" )
-
+    llm = HuggingFaceHub(
+        repo_id="mistralai/Mistral-7B-Instruct-v0.1",
+        model_kwargs={"temperature": 0.5, "max_new_tokens": 512}
+    )
     wiki_tool = WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper())
 
     def dictionary_tool_fn(query: str) -> str:
