@@ -61,10 +61,16 @@ if user_input:
     # أضف رسالة المستخدم إلى السجل
     st.session_state.chat_history.append({"role": "user", "content": user_input})
 
-    with st.spinner("⏳ Thinking..."):
+       with st.spinner("⏳ Thinking..."):
         try:
             response = agent.run(user_input)
-            answer = str(response).strip()
+
+            # ✅ التأكد إن الناتج ما هو undefined أو None
+            if not response or str(response).strip().lower() in ["none", "undefined"]:
+                answer = "🤖 Sorry, I couldn't understand that."
+            else:
+                answer = str(response).strip()
+
         except Exception as e:
             answer = f"⚠️ Error: {str(e)}"
 
