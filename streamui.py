@@ -75,7 +75,7 @@ if user_input:
                 # st.write(f"DEBUG response content: {response}")
                 # Display only once
                 res = str(response)
-
+                st.markdown(response)
                 st.session_state.chat_history.append({"role": "assistant", "content": res})
 
             except Exception as e:
