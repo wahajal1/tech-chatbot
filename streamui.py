@@ -49,31 +49,29 @@ agent, memory = load_agent()
 
 st.title("💬 Tech ChatBot")
 
-# chat history
+# إعداد سجل المحادثة
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-# showing the last message
+# 📥 واجهة إدخال المستخدم
+user_input = st.chat_input("Write your question here...")
+
+# 📤 تنفيذ الرد إذا فيه إدخال
+if user_input:
+    # أضف رسالة المستخدم إلى السجل
+    st.session_state.chat_history.append({"role": "user", "content": user_input})
+
+    with st.spinner("⏳ Thinking..."):
+        try:
+            response = agent.run(user_input)
+            answer = str(response).strip()
+        except Exception as e:
+            answer = f"⚠️ Error: {str(e)}"
+
+    # أضف رد البوت إلى السجل
+    st.session_state.chat_history.append({"role": "assistant", "content": answer})
+
+# ✅ عرض سجل المحادثة بعد الرد (يمنع التكرار وظهور undefined)
 for msg in st.session_state.chat_history:
     with st.chat_message(msg["role"]):
-     st.markdown(msg["content"])
-
-#user input
-user_input = st.chat_input("Write your question here...")
-if user_input:
-    st.session_state.chat_history.append({"role": "user", "content": user_input})
-    with st.chat_message("user"):
-        st.markdown(user_input)
-
-    with st.chat_message("assistant"):
-        with st.spinner("⏳ Loading..."):
-            try:
-                response = agent.run(user_input)
-                res = str(response)
-                st.markdown(res)
-                st.session_state.chat_history.append({"role": "assistant", "content": res})
-
-            except Exception as e:
-                error_msg = f"⚠️ Error: {e}"
-                st.markdown(error_msg)
-                st.session_state.chat_history.append({"role": "assistant", "content": error_msg})
+        st.markdown(msg["content"])
