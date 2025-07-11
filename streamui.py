@@ -62,17 +62,14 @@ if user_input:
     st.session_state.chat_history.append({"role": "user", "content": user_input})
 
     with st.spinner("⏳ Thinking..."):
-        try:
-            response = agent.run(user_input)
-
-            # ✅ التأكد إن الناتج ما هو undefined أو None
-            if not response or str(response).strip().lower() in ["none", "undefined"]:
-                answer = "🤖 Sorry, I couldn't understand that."
-            else:
-                answer = str(response) if isinstance(response, str) else str(response.__str__()).strip()
-
-        except Exception as e:
-            answer = f"⚠️ Error: {str(e)}"
+         response = agent.run(user_input)
+         try:
+          # نحاول نحول الناتج إلى نص واضح
+          answer = str(response).strip()
+          if answer.lower() in ["none", "undefined", ""]:
+           answer = "🤖 Sorry, I couldn't generate a clear answer."
+         except Exception:
+           answer = "🤖 Unexpected error in formatting the response."
 
     # أضف رد البوت إلى السجل
     st.session_state.chat_history.append({"role": "assistant", "content": answer})
