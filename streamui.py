@@ -56,7 +56,7 @@ if "chat_history" not in st.session_state:
 # showing the last message
 for msg in st.session_state.chat_history:
     with st.chat_message(msg["role"]):
-     st.markdown(msg["content])
+     st.markdown(msg["content"])
 
 #user input
 user_input = st.chat_input("Write your question here...")
