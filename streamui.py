@@ -88,5 +88,5 @@ if user_input:
                 response = f"⚠️ Error: {e}"
 
             # عرض الرد
-            st.markdown(response)
-            st.session_state.chat_history.append({"role": "assistant", "content": response})
+            st.markdown(response.content)
+            st.session_state.chat_history.append({"role": "assistant", "content": response.content})
