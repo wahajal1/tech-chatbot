@@ -70,7 +70,11 @@ if user_input:
             try:
                 response = agent.run(user_input)
 
-                # Ensure response is a string before displaying
+                # Debug: show raw response type and content
+                # st.write(f"DEBUG response type: {type(response)}")
+                # st.write(f"DEBUG response content: {response}")
+
+                # Ensure response is string
                 if not isinstance(response, str):
                     try:
                         response = response.content
@@ -80,10 +84,13 @@ if user_input:
                 if not response.strip():
                     response = "⚠️ Sorry, I couldn't generate a response."
 
+                # Display only once
                 st.markdown(response)
+
                 st.session_state.chat_history.append({"role": "assistant", "content": response})
 
             except Exception as e:
                 error_msg = f"⚠️ Error: {e}"
                 st.markdown(error_msg)
                 st.session_state.chat_history.append({"role": "assistant", "content": error_msg})
+
