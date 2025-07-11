@@ -69,7 +69,7 @@ if user_input:
             if not response or str(response).strip().lower() in ["none", "undefined"]:
                 answer = "🤖 Sorry, I couldn't understand that."
             else:
-                answer = str(response).strip()
+                answer = str(response) if isinstance(response, str) else str(response.__str__()).strip()
 
         except Exception as e:
             answer = f"⚠️ Error: {str(e)}"
