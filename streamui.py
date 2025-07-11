@@ -49,16 +49,16 @@ agent, memory = load_agent()
 
 st.title("💬 Tech ChatBot")
 
-# سجل المحادثة
+# chat history
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-# عرض المحادثة السابقة
+# showing the last message
 for msg in st.session_state.chat_history:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-# إدخال المستخدم
+#user input
 user_input = st.chat_input("Write your question here...")
 if user_input:
     st.session_state.chat_history.append({"role": "user", "content": user_input})
@@ -69,14 +69,9 @@ if user_input:
         with st.spinner("⏳ Loading..."):
             try:
                 response = agent.run(user_input)
-
-                # Debug: show raw response type and content
-                # st.write(f"DEBUG response type: {type(response)}")
-                # st.write(f"DEBUG response content: {response}")
-                # Display only once
                 res = str(response)
                 st.markdown(res)
-                st.session_state.chat_history.append({"role": "assistant", "content": response})
+                st.session_state.chat_history.append({"role": "assistant", "content": res})
 
             except Exception as e:
                 error_msg = f"⚠️ Error: {e}"
