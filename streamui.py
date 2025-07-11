@@ -20,7 +20,7 @@ def load_agent():
             "AI": "AI is the field of computer science that focuses on simulating intelligence...",
             "data science": "Data science is the process of extracting insights from data...",
         }
-        return simple_dict.get(query.lower(), "Unkown")
+        return simple_dict.get(query, "Unkown")
 
     dictionary_tool = Tool(
         name="dictionary_tool",
