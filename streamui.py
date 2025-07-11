@@ -60,33 +60,30 @@ for msg in st.session_state.chat_history:
 
 # إدخال المستخدم
 user_input = st.chat_input("Write your question here...")
-
 if user_input:
-    # أضف رسالة المستخدم
     st.session_state.chat_history.append({"role": "user", "content": user_input})
     with st.chat_message("user"):
         st.markdown(user_input)
 
-    # تشغيل الوكيل والرد
     with st.chat_message("assistant"):
         with st.spinner("⏳ Loading..."):
             try:
                 response = agent.run(user_input)
-                # عرض الرد
-                st.markdown(response)
-                st.session_state.chat_history.append({"role": "assistant", "content": response})
-                # تحقق إن الرد نص
+
+                # Ensure response is a string before displaying
                 if not isinstance(response, str):
                     try:
                         response = response.content
                     except AttributeError:
                         response = str(response)
 
-                # لو كان الرد فاضي
                 if not response.strip():
                     response = "⚠️ Sorry, I couldn't generate a response."
 
-            except Exception as e:
-                response = f"⚠️ Error: {e}"
+                st.markdown(response)
+                st.session_state.chat_history.append({"role": "assistant", "content": response})
 
-           
+            except Exception as e:
+                error_msg = f"⚠️ Error: {e}"
+                st.markdown(error_msg)
+                st.session_state.chat_history.append({"role": "assistant", "content": error_msg})
