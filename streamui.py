@@ -9,9 +9,12 @@ from langchain.memory import ConversationBufferMemory
 @st.cache_resource
 def load_agent():
     llm = HuggingFaceHub(
-        repo_id="mistralai/Mistral-7B-Instruct-v0.1",
-        model_kwargs={"temperature": 0.5, "max_new_tokens": 512}
-    )
+    repo_id="HuggingFaceH4/zephyr-7b-beta",  # بديل متوافق وآمن
+    model_kwargs={
+        "temperature": 0.5,
+        "max_new_tokens": 512
+    }
+)
     wiki_tool = WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper())
 
     def dictionary_tool_fn(query: str) -> str:
