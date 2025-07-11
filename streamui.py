@@ -6,7 +6,12 @@ from langchain.utilities import WikipediaAPIWrapper
 from langchain.tools import WikipediaQueryRun
 from langchain.memory import ConversationBufferMemory
 
-os.environ["HUGGINGFACEHUB_API_TOKEN"] = "hf_YourTokenHere"  # ضع التوكن الخاص بك هنا
+import os
+token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
+
+if not token:
+    raise ValueError("❌ HuggingFace token not found. Set it in environment variables or secrets.")
+
 
 @st.cache_resource
 def load_agent():
@@ -51,32 +56,31 @@ agent, memory = load_agent()
 
 st.title("💬 Tech ChatBot")
 
-# إعداد سجل المحادثة
+
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-# 📥 واجهة إدخال المستخدم
+
 user_input = st.chat_input("Write your question here...")
 
-# 📤 تنفيذ الرد إذا فيه إدخال
 if user_input:
-    # أضف رسالة المستخدم إلى السجل
+    
     st.session_state.chat_history.append({"role": "user", "content": user_input})
 
     with st.spinner("⏳ Thinking..."):
          response = agent.run(user_input)
          try:
-          # نحاول نحول الناتج إلى نص واضح
+        
           answer = str(response).strip()
           if answer.lower() in ["none", "undefined", ""]:
            answer = "🤖 Sorry, I couldn't generate a clear answer."
          except Exception:
            answer = "🤖 Unexpected error in formatting the response."
 
-    # أضف رد البوت إلى السجل
+  
     st.session_state.chat_history.append({"role": "assistant", "content": answer})
 
-# ✅ عرض سجل المحادثة بعد الرد (يمنع التكرار وظهور undefined)
+
 for msg in st.session_state.chat_history:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
