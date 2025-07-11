@@ -61,7 +61,7 @@ if user_input:
     # أضف رسالة المستخدم إلى السجل
     st.session_state.chat_history.append({"role": "user", "content": user_input})
 
-       with st.spinner("⏳ Thinking..."):
+    with st.spinner("⏳ Thinking..."):
         try:
             response = agent.run(user_input)
 
