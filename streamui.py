@@ -70,5 +70,20 @@ if user_input:
     with st.chat_message("assistant"):
         with st.spinner("⏳ Loading..."):
             response = agent.run(user_input)
-            st.markdown(response)
-            st.session_state.chat_history.append({"role": "assistant", "content": response})
+
+# تحقق إن الرد نص
+if not isinstance(response, str):
+    try:
+        # لو فيه خاصية content
+        response = response.content
+    except AttributeError:
+        # أو حاولي تحولين الرد لنص
+        response = str(response)
+
+# إذا كان فاضي
+if not response.strip():
+    response = "⚠️ لم أستطع معالجة رد مناسب."
+
+# عرض الرد
+st.markdown(response)
+st.session_state.chat_history.append({"role": "assistant", "content": response})
